@@ -16,20 +16,31 @@ const Theme = {
   DARK: 'dark-theme',
 };
 
+let darkMode = localStorage.getItem('Theme');
 const refs = {
   body: document.querySelector('body'),
   themeSwitcher: document.querySelector('#theme-switch-toggle'),
 };
 
-refs.themeSwitcher.addEventListener('change', onThemeChange);
+const setDarkMode = () => {
+  document.body.classList.add(Theme.DARK);
+  localStorage.setItem('Theme', Theme.DARK);
+};
 
-function onThemeChange(evt) {
-  localStorage.setItem('theme', 'Theme.LIGHT');
-
-  if (evt.target.checked) {
-    refs.body.classList.remove(Theme.LIGHT);
-    return refs.body.classList.add(Theme.DARK);
-  }
-  refs.body.classList.add(Theme.LIGHT);
+const setLightMode = () => {
   refs.body.classList.remove(Theme.DARK);
+  localStorage.setItem('Theme', Theme.LIGHT);
+};
+
+if (darkMode === Theme.DARK) {
+  setDarkMode();
 }
+
+refs.themeSwitcher.addEventListener('change', () => {
+  darkMode = localStorage.getItem('Theme');
+  if (darkMode !== Theme.DARK) {
+    setDarkMode();
+  } else {
+    setLightMode();
+  }
+});
